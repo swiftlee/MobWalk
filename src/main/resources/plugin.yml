@@ -1,0 +1,5 @@
+name: AntiAFK
+main: org.jm.spigotmc.core.AntiAfk
+version: 1.0
+author: SwiftLee
+description: Assists to avoid AFK.
