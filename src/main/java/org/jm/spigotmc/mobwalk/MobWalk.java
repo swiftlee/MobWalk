@@ -9,10 +9,12 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftZombie;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Set;
 
@@ -37,18 +39,6 @@ import java.util.Set;
 public class MobWalk extends JavaPlugin {
 
     @Override
-    public void onEnable() {
-
-
-    }
-
-    @Override
-    public void onDisable() {
-
-
-    }
-
-    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (command.getName().equalsIgnoreCase("setmob")) {
@@ -57,15 +47,18 @@ public class MobWalk extends JavaPlugin {
 
                 Player p = (Player) sender;
                 Entity entity = p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
+                Location loc = p.getTargetBlock((Set<Material>) null, 50).getLocation();
 
-                ((EntityInsentient) entity).setGoalTarget(null);
-                moveTo(entity, p.getTargetBlock((Set<Material>) null, 20).getLocation());
+                final BukkitTask task = getServer().getScheduler().runTaskTimer(this, () -> ((CraftZombie) entity).getHandle().getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), 1.5), 0L, 10L);
+                
 
             } else {
 
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThe console cannot execute this command."));
 
             }
+
+            return true;
 
         }
 
